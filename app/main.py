@@ -2,7 +2,7 @@ import spacy
 from io import BytesIO
 from fastapi import FastAPI, File, UploadFile
 from pdfminer.high_level import extract_text
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from spacy.matcher import Matcher
 from mangum import Mangum
 

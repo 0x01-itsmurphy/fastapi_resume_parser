@@ -44,7 +44,7 @@ pycountry==23.12.7
 pycparser==2.21
 pydantic==2.5.2
 pydantic_core==2.14.5
-PyPDF2==3.0.1
+pypdf==3.17.1
 python-dateutil==2.8.2
 python-multipart==0.0.6
 pytz==2023.3.post1
