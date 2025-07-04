@@ -65,7 +65,7 @@ starlette==0.40.0
 thinc==8.2.1
 tinysegmenter==0.3
 tldextract==5.1.1
-tqdm==4.66.1
+tqdm==4.66.3
 typer==0.9.0
 typing_extensions==4.8.0
 tzdata==2023.3
