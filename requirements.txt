@@ -71,7 +71,7 @@ typing_extensions==4.8.0
 tzdata==2023.3
 uritools==4.0.2
 urlextract==1.8.0
-urllib3==2.1.0
+urllib3==2.5.0
 uvicorn==0.24.0
 wasabi==1.1.2
 weasel==0.3.4
