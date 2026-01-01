@@ -398,59 +398,62 @@ def check_list(lst):
 
 
 def get_location(txt):
-    place = locationtagger.find_locations(text=txt)
-    # doc = nlp(txt)
+    try:
+        place = locationtagger.find_locations(text=txt)
+        cities = place.cities
+        
+        # Check if any cities were found
+        if not cities or len(cities) == 0:
+            logger.warning("No cities found in resume text")
+            return None
+        
+        # Define the city
+        city = cities[0]
+        geolocator = Nominatim(user_agent="geoapiExercises")
 
-    # locations = [ent.text for ent in doc.ents if ent.label_ == "GPE"]
-    cities = place.cities
+        # Perform a geocode lookup for the city
+        location = geolocator.geocode(city, language="en")
+        
+        if location:
+            address = location.address.split(', ')
 
-    # Define the city
-    city = cities[0]
-    geolocator = Nominatim(user_agent="geoapiExercises")
+            state = None
+            country = None
+            zip_code = None
 
-    # Perform a geocode lookup for the city
-    location = geolocator.geocode(city, language="en")
-    print(location)
-    if location:
-        address = location.address.split(', ')
-        print("ADD")
-        print(address)
+            if len(address) > 0:
+                last_element = address[-1]
+                country = last_element
+            else:
+                last_element = None
 
-        state = None
-        country = None
-        zip_code = None
+            if len(address) >= 1 and contains_integer(address[-2]):
+                last_second_element = address[-2]
+                zip_code = last_second_element
+            else:
+                last_second_element = None
 
-        if len(address) > 0:
-            last_element = address[-1]
-            country = last_element
+            if len(address) > 2:
+                last_third_element = address[-3]
+                state = last_third_element
+            else:
+                last_third_element = None
+
+            return {
+                "formatted": None,
+                "streetNumber": None,
+                "street": None,
+                "apartmentNumber": None,
+                "city": city,
+                "postalCode": zip_code,
+                "state": state,
+                "country": country,
+            }
         else:
-            last_element = None
-
-        if len(address) >= 1 and contains_integer(address[-2]):
-            last_second_element = address[-2]
-            zip_code = last_second_element
-        else:
-            print("No integer found in second last string")
-            last_second_element = None
-
-        if len(address) > 2:
-            last_third_element = address[-3]
-            state = last_third_element
-        else:
-            last_third_element = None
-
-        return {
-            "formatted": None,
-            "streetNumber": None,
-            "street": None,
-            "apartmentNumber": None,
-            "city": city,
-            "postalCode": zip_code,
-            "state": state,
-            "country": country,
-            # "raw": location,
-        }
-    else:
+            logger.warning(f"Could not geocode city: {city}")
+            return None
+    except Exception as e:
+        logger.error(f"Error extracting location: {e}")
         return None
 
 
