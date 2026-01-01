@@ -1,96 +1,112 @@
 # FastAPI Resume Parser
 
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-009688.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
 A modern, high-performance resume parsing API built with FastAPI that extracts structured information from PDF resumes using advanced NLP techniques.
 
-## 🚀 Features
+## 🌟 Features
 
-- **PDF Text Extraction**: Supports multiple PDF parsing methods (PyPDF, pdfminer)
-- **NLP Processing**: Uses spaCy for advanced natural language processing
+- **Advanced PDF Processing** - Supports multiple PDF parsing methods (PyPDF, pdfminer.six)
+- **NLP-Powered Extraction** - Uses spaCy for intelligent text analysis
 - **Comprehensive Data Extraction**:
-  - Personal Information (name, email, phone)
-  - Social Media Links (LinkedIn, GitHub, etc.)
-  - Skills and Technologies
-  - Education Details
-  - Work Experience
-  - Location and Address Information
-  - Languages
-- **Modern FastAPI**: Built with the latest FastAPI features
-- **Error Handling**: Robust error handling and logging
-- **Docker Support**: Containerized for easy deployment
-- **AWS Lambda Ready**: Configured for serverless deployment
+  - 📧 Personal Information (name, email, phone)
+  - 🔗 Social Media Links (LinkedIn, GitHub)
+  - 💼 Skills and Technologies
+  - 🎓 Education Details
+  - 🗺️ Location and Address Information
+  - 🌍 Languages
+- **Modern FastAPI** - Built with FastAPI 0.128.0 with automatic OpenAPI documentation
+- **Type-Safe** - Comprehensive type hints throughout
+- **Production-Ready** - Proper error handling, logging, and validation
+- **Docker Support** - Containerized for easy deployment
+- **AWS Lambda Ready** - Configured for serverless deployment
 
-## 📋 Requirements
+## 🚀 Quick Start
+
+### Prerequisites
 
 - Python 3.9+
-- FastAPI 0.115.6+
-- spaCy with English model
-- Various PDF processing libraries (see requirements.txt)
+- pip
 
-## 🛠️ Installation
+### Installation
 
-### Option 1: Quick Setup (Recommended)
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/fastapi_resume_parser.git
+   cd fastapi_resume_parser
+   ```
+
+2. **Create virtual environment**
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Download required NLTK data**
+
+   ```bash
+   python -c "import nltk; nltk.download('punkt_tab'); nltk.download('averaged_perceptron_tagger_eng'); nltk.download('maxent_ne_chunker_tab'); nltk.download('stopwords'); nltk.download('words')"
+   ```
+
+5. **Run the server**
+
+   ```bash
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+6. **Test the API**
+
+   Visit http://localhost:8000/docs for interactive API documentation
+
+## 📖 API Documentation
+
+### Endpoints
+
+| Method | Endpoint  | Description                          |
+| ------ | --------- | ------------------------------------ |
+| GET    | `/`       | Root endpoint - API status           |
+| GET    | `/health` | Health check endpoint                |
+| POST   | `/parse`  | Parse resume and extract information |
+
+### Example Usage
+
+**Using cURL:**
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd fastapi_resume_parser
-
-# Run the development setup script
-python run_dev.py
+curl -X POST "http://localhost:8000/parse" \
+  -H "accept: application/json" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@resume.pdf"
 ```
 
-### Option 2: Manual Setup
+**Using Python:**
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+```python
+import requests
 
-# Download spaCy English model
-python -m spacy download en_core_web_sm
-
-# Run the server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+url = "http://localhost:8000/parse"
+files = {"file": open("resume.pdf", "rb")}
+response = requests.post(url, files=files)
+print(response.json())
 ```
 
-### Option 3: Docker
-
-```bash
-# Build the Docker image
-docker build -t fastapi-resume-parser .
-
-# Run the container
-docker run -p 8000:8000 fastapi-resume-parser
-```
-
-## 🔧 Usage
-
-### API Endpoints
-
-#### 1. Health Check
-```bash
-GET /health
-```
-
-#### 2. Basic Resume Parsing (Legacy)
-```bash
-POST /parse_resume
-Content-Type: multipart/form-data
-Body: file (PDF)
-```
-
-#### 3. Advanced Resume Parsing (Recommended)
-```bash
-POST /parse
-Content-Type: multipart/form-data
-Body: file (PDF)
-```
-
-### Example Response
+### Response Format
 
 ```json
 {
   "status": "success",
-  "filename": "john_doe_resume.pdf",
+  "filename": "resume.pdf",
   "personal_info": {
     "name": "John Doe",
     "email": ["john.doe@example.com"],
@@ -98,20 +114,15 @@ Body: file (PDF)
   },
   "social_links": {
     "linkedin": "linkedin.com/in/johndoe",
-    "github": "johndoe",
-    "others": []
+    "github": "johndoe"
   },
-  "skills": ["Python", "Machine Learning", "FastAPI", "Docker"],
+  "skills": ["Python", "FastAPI", "Machine Learning"],
   "education_details": {
     "courses": ["B.Tech"],
     "specializations": ["Computer Science"],
     "college": ["University of Technology"]
   },
-  "address": {
-    "location": {...},
-    "zip_code": ["12345"]
-  },
-  "languages": ["English", "Spanish"],
+  "languages": ["English"],
   "processing_info": {
     "text_length": 1250,
     "tokens_processed": 320,
@@ -120,114 +131,124 @@ Body: file (PDF)
 }
 ```
 
-## 🌐 API Documentation
-
-Once the server is running, you can access:
-
-- **Interactive API Documentation**: http://localhost:8000/docs
-- **Alternative API Documentation**: http://localhost:8000/redoc
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
-
-## 🧪 Testing
-
-```bash
-# Test the API with curl
-curl -X POST "http://localhost:8000/parse" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@path/to/your/resume.pdf"
-```
-
-## 🚀 Deployment
-
-### Local Development
-```bash
-python run_dev.py
-```
-
-### Production with Docker
-```bash
-docker build -t fastapi-resume-parser .
-docker run -p 8000:8000 fastapi-resume-parser
-```
-
-### AWS Lambda (Serverless)
-The application is configured for AWS Lambda deployment using Mangum. Update the Dockerfile to use the Lambda base image and deploy using AWS SAM or Serverless Framework.
-
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 ```
 fastapi_resume_parser/
 ├── app/
-│   ├── __init__.py
-│   ├── main.py          # FastAPI application
-│   ├── utils.py         # Utility functions for parsing
-│   └── assets/          # Static assets
-│       ├── skills.csv
-│       └── spe.csv
-├── Dockerfile           # Container configuration
-├── requirements.txt     # Python dependencies
-├── run_dev.py          # Development setup script
-└── README.md           # This file
+│   ├── core/
+│   │   ├── config.py          # Configuration management
+│   │   └── logging.py         # Logging setup
+│   ├── models/
+│   │   └── schemas.py         # Pydantic models
+│   ├── routers/
+│   │   ├── health.py          # Health check endpoints
+│   │   └── parse.py           # Parsing endpoints
+│   ├── main.py                # FastAPI application
+│   └── utils.py               # Extraction utilities
+├── tests/
+│   └── test_api.py            # API tests
+├── requirements.txt           # Production dependencies
+├── requirements-dev.txt       # Development dependencies
+├── pyproject.toml             # Tool configurations
+├── Dockerfile                 # Docker configuration
+└── README.md                  # This file
 ```
 
-## 🔧 Configuration
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run tests
+pytest
+
+# Run tests with coverage
+pytest --cov=app --cov-report=html
+```
+
+## 🛠️ Development
+
+### Code Quality
+
+This project uses several tools to maintain code quality:
+
+```bash
+# Format code
+black app/ tests/
+
+# Sort imports
+isort app/ tests/
+
+# Lint code
+flake8 app/ tests/
+
+# Type checking
+mypy app/
+```
+
+### Pre-commit Hooks
+
+Install pre-commit hooks to automatically check code quality:
+
+```bash
+pre-commit install
+```
+
+## 🐳 Docker
+
+### Build and Run
+
+```bash
+# Build the image
+docker build -t fastapi-resume-parser .
+
+# Run the container
+docker run -p 8000:8000 fastapi-resume-parser
+```
+
+## 🚀 Deployment
 
 ### Environment Variables
-- `DEBUG`: Enable debug mode (default: False)
-- `LOG_LEVEL`: Set logging level (default: INFO)
-- `MAX_FILE_SIZE`: Maximum file size for uploads (default: 10MB)
 
-### Skills Database
-The application uses a comprehensive skills database that includes:
-- Programming languages
-- Frameworks and libraries
-- Databases
-- Cloud platforms
-- Tools and technologies
+Create a `.env` file based on `.env.example`:
+
+```env
+DEBUG=false
+LOG_LEVEL=info
+MAX_FILE_SIZE=10485760
+CORS_ORIGINS=*
+```
+
+### Production Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for:
+
+- AWS Lambda
+- Docker/Kubernetes
+- Traditional servers
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🐛 Known Issues
+## 🙏 Acknowledgments
 
-- Large PDF files may take longer to process
-- Some complex PDF layouts may not parse correctly
-- Location extraction depends on external geocoding services
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework
+- [spaCy](https://spacy.io/) - Industrial-strength NLP
+- [pdfminer.six](https://github.com/pdfminer/pdfminer.six) - PDF text extraction
 
-## 🔄 Updates (v2.0.0)
+## 📧 Contact
 
-- Updated to FastAPI 0.115.6
-- Improved error handling and logging
-- Enhanced skills extraction with comprehensive database
-- Added health check endpoint
-- Modernized Dockerfile with multi-stage builds
-- Added comprehensive API documentation
-- Improved response structure with metadata
+For questions or support, please open an issue on GitHub.
 
-## 📞 Support
+---
 
-For support, please open an issue in the repository or contact the maintainers.
-
-Please replace the placeholders with your actual file names and variables. If you have any issues, feel free to ask for help. Happy coding! 😊
-
-
-if you encounter an error stating that the pip module is not found, you can use the following steps to ensure pip is installed and upgraded:
-
-Open your command prompt or terminal.
-Run the following command to ensure pip is installed and upgraded:
-
-```
-py -m ensurepip --upgrade
-```
-
-This command will install pip if it’s not already installed, and upgrade it to the latest version.
+**Made with ❤️ using FastAPI and Python**

@@ -247,21 +247,7 @@ def extract_skills_new(resume_text: str) -> List[str]:
         return []
 
 
-# def extract_education_details(text: str):
-#     # Define a list of degrees and their variations
-#     degrees = ["B\.A\.", "B\.S\.", "B\.Sc\.", "M\.A\.", "M\.S\.", "M\.Sc\.",
-#                "Ph\.D\.", "M\.B\.A\.", "B\.E\.", "M\.E\.", "B\.Tech\.", "M\.Tech\.", "Bachelor of Technology",]
 
-#     # Define a regex pattern for degrees and university names
-#     degree_pattern = "|".join(degrees)
-#     university_pattern = r"[A-Za-z\s]+University"
-
-#     # Find matches in the text
-#     degree_matches = re.findall(degree_pattern, text)
-#     university_matches = re.findall(university_pattern, text)
-
-#     # Combine and return the results
-#     return university_matches
 
 def extract_course_name(text: str):
     # Define a list of degrees and their variations
@@ -390,11 +376,16 @@ def contains_integer(s):
     return bool(re.search(r'\d', s))
 
 
-def check_list(lst):
+def check_list(lst: list) -> None:
+    """Check if the second last element in the list contains an integer.
+    
+    Args:
+        lst: List to check
+    """
     if len(lst) >= 2 and contains_integer(lst[-2]):
-        print(lst[-2])
+        logger.debug(f"Integer found in second last element: {lst[-2]}")
     else:
-        print("No integer found in second last string")
+        logger.debug("No integer found in second last string")
 
 
 def get_location(txt):
@@ -477,23 +468,7 @@ def extract_zip_code(resume_text):
 
     return zip_codes
 
-# def extract_addresses(text):
-#     # Regex pattern for city, state, and zip code
-#     pattern = r'([A-Za-z]+(?:[ -][A-Za-z]+)*),\s*([A-Za-z]{2})\s*(\d{5}(?:-\d{4})?)?'
 
-#     # Find all matches in the text
-#     matches = re.finditer(pattern, text)
-
-#     # Extract the addresses
-#     addresses = [match.group(0) for match in matches]
-
-#     # Use Named Entity Recognition (NER) to extract additional addresses
-#     doc = nlp(text)
-#     for ent in doc.ents:
-#         if ent.label_ == "GPE":
-#             addresses.append(ent.text)
-
-#     return addresses
 
 
 def extract_education(resume_text):
