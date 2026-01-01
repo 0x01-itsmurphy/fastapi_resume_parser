@@ -6,7 +6,7 @@ mangum==0.20.0
 
 # PDF processing
 pypdf==6.5.0
-pdfminer.six==20251107
+pdfminer.six==20251230
 
 # NLP and text processing
 spacy==3.8.11
