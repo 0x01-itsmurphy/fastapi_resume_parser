@@ -1,6 +1,6 @@
 # FastAPI Resume Parser
 
-![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-009688.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
@@ -21,6 +21,7 @@ A modern, high-performance resume parsing API built with FastAPI that extracts s
 - **Modern FastAPI** - Built with FastAPI 0.128.0 with automatic OpenAPI documentation
 - **Type-Safe** - Comprehensive type hints throughout
 - **Production-Ready** - Proper error handling, logging, and validation
+- **Maintainable Architecture** - Clear API, service, extractor, schema, and domain layers
 - **Docker Support** - Containerized for easy deployment
 - **AWS Lambda Ready** - Configured for serverless deployment
 
@@ -28,7 +29,7 @@ A modern, high-performance resume parsing API built with FastAPI that extracts s
 
 ### Prerequisites
 
-- Python 3.9+
+- Python 3.10+
 - pip
 
 ### Installation
@@ -43,7 +44,7 @@ A modern, high-performance resume parsing API built with FastAPI that extracts s
 2. **Create virtual environment**
 
    ```bash
-   python3 -m venv venv
+   python3.11 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
@@ -77,14 +78,15 @@ A modern, high-performance resume parsing API built with FastAPI that extracts s
 | ------ | --------- | ------------------------------------ |
 | GET    | `/`       | Root endpoint - API status           |
 | GET    | `/health` | Health check endpoint                |
-| POST   | `/parse`  | Parse resume and extract information |
+| POST   | `/v1/resumes/parse` | Parse resume and extract information |
+| POST   | `/parse`  | Backward-compatible parse endpoint   |
 
 ### Example Usage
 
 **Using cURL:**
 
 ```bash
-curl -X POST "http://localhost:8000/parse" \
+curl -X POST "http://localhost:8000/v1/resumes/parse" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@resume.pdf"
@@ -95,7 +97,7 @@ curl -X POST "http://localhost:8000/parse" \
 ```python
 import requests
 
-url = "http://localhost:8000/parse"
+url = "http://localhost:8000/v1/resumes/parse"
 files = {"file": open("resume.pdf", "rb")}
 response = requests.post(url, files=files)
 print(response.json())
@@ -138,14 +140,19 @@ fastapi_resume_parser/
 ├── app/
 │   ├── core/
 │   │   ├── config.py          # Configuration management
+│   │   ├── errors.py          # Application-specific exceptions
 │   │   └── logging.py         # Logging setup
-│   ├── models/
-│   │   └── schemas.py         # Pydantic models
-│   ├── routers/
-│   │   ├── health.py          # Health check endpoints
-│   │   └── parse.py           # Parsing endpoints
+│   ├── api/
+│   │   ├── dependencies.py    # FastAPI dependency factories
+│   │   └── routes/            # HTTP route modules
+│   ├── domain/
+│   │   └── models.py          # Internal parser result models
+│   ├── extractors/            # Focused resume field extractors
+│   ├── resources/             # Local parsing vocabularies
+│   ├── schemas/
+│   │   └── responses.py       # Public API response models
+│   ├── services/              # Parser orchestration and infrastructure services
 │   ├── main.py                # FastAPI application
-│   └── utils.py               # Extraction utilities
 ├── tests/
 │   └── test_api.py            # API tests
 ├── requirements.txt           # Production dependencies
@@ -221,15 +228,13 @@ DEBUG=false
 LOG_LEVEL=info
 MAX_FILE_SIZE=10485760
 CORS_ORIGINS=*
+ALLOW_CREDENTIALS=false
 ```
 
 ### Production Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for:
-
-- AWS Lambda
-- Docker/Kubernetes
-- Traditional servers
+The app is ready to deploy as a standard ASGI service with Uvicorn, as a Docker
+container, or behind an API gateway using the included Mangum handler.
 
 ## 🤝 Contributing
 

@@ -12,7 +12,7 @@ services:
       - MAX_FILE_SIZE=10485760
       - CORS_ORIGINS=*
     volumes:
-      - ./logs:/app/logs
+      - ./logs:/code/logs
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

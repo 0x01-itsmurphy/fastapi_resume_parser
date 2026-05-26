@@ -2,6 +2,26 @@
 
 All notable changes to the FastAPI Resume Parser project will be documented in this file.
 
+## [2.1.0] - 2026-05-26
+
+### Architecture
+- Added a layered production architecture with separate API, service, extractor, schema, domain, and resource packages.
+- Centralized resume parsing orchestration in `ResumeParserService`.
+- Centralized spaCy model loading in `NlpService`.
+- Split PDF extraction and upload validation into focused services.
+- Split resume extraction into focused contact, profile, skill, education, language, and location extractors.
+
+### API
+- Added the versioned production endpoint `POST /v1/resumes/parse`.
+- Kept `POST /parse` as a backward-compatible alias.
+- Improved invalid or unreadable PDF handling with a clear `422` response.
+
+### Cleanup
+- Removed unused legacy `app/utils.py`, `app/routers`, `app/models`, and duplicate `app/assets` files.
+- Moved local parser resources to `app/resources`.
+- Updated documentation to match the new source layout.
+- Hardened settings parsing for common deployment values and comma-separated list environment variables.
+
 ## [2.0.0] - 2025-01-05
 
 ### 🚀 Major Updates
