@@ -2,6 +2,7 @@
 """
 Test script for FastAPI Resume Parser
 """
+
 import json
 from pathlib import Path
 
