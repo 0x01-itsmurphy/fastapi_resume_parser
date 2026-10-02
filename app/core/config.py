@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     debug: bool = False
 
     # Server Configuration
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # nosec B104 - intentional for containerized deployments
     port: int = 8000
     workers: int = 1
     log_level: str = "info"
