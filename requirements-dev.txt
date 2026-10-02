@@ -1,5 +1,5 @@
 # Development dependencies
-pytest==9.0.3
+pytest==9.1.1
 pytest-asyncio==1.4.0
 pytest-cov==7.1.0
 httpx==0.28.1
@@ -7,12 +7,12 @@ requests==2.34.2
 
 # Code quality tools
 black==26.5.1
-isort==8.0.1
-flake8==7.3.0
-mypy==2.1.0
+isort==9.0.2
+flake8==7.4.1
+mypy==2.4.0
 pre-commit==4.6.0
 bandit==1.9.4
 
 # Documentation
 mkdocs==1.6.1
-mkdocs-material==9.7.6
+mkdocs-material==9.7.7
