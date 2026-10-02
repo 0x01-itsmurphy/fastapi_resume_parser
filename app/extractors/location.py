@@ -47,10 +47,10 @@ class LocationExtractor:
 
         # Filter out language names from cities
         cities = [city for city in cities if city.lower() not in self.LANGUAGE_NAMES]
-        
+
         # Additional filtering: remove single letters that are likely not real places
         cities = [city for city in cities if len(city) > 1]
-        
+
         city = cities[0] if cities else None
         state = regions[0] if regions else None
         country = countries[0] if countries else None

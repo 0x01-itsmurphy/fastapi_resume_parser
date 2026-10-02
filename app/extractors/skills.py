@@ -9,7 +9,13 @@ from typing import Any, Iterable, List, Set
 class SkillExtractor:
     """Extract known skills using a local skills vocabulary."""
 
-    NON_SKILL_TERMS = {"arabic", "bengali", "business", "chinese", "com", "communication", "computer science", "english", "french", "german", "hindi", "http", "https", "information technology", "italian", "japanese", "korean", "leadership", "management", "net", "org", "portuguese", "spanish", "teamwork", "www"}
+    NON_SKILL_TERMS = {
+        "arabic", "bengali", "business", "chinese", "com", "communication",
+        "computer science", "english", "french", "german", "hindi", "http",
+        "https", "information technology", "italian", "japanese", "korean",
+        "leadership", "management", "net", "org", "portuguese", "spanish",
+        "teamwork", "www",
+    }
 
     def __init__(self, skills_path: Path | None = None) -> None:
         self.skills_path = (
@@ -25,12 +31,13 @@ class SkillExtractor:
             # Skip non-technical terms
             if skill in self.NON_SKILL_TERMS:
                 continue
-                
+
             pattern = rf"(?<![A-Za-z0-9+#.]){re.escape(skill)}(?![A-Za-z0-9+#.])"
             if re.search(pattern, text_lower):
                 found.add(skill)
 
         return [self._display_name(skill) for skill in sorted(found)]
+
     def _load_skills(self) -> Set[str]:
         if not self.skills_path.exists():
             return set()
@@ -52,7 +59,7 @@ class SkillExtractor:
         preserve_upper = {"aws", "gcp", "html", "css", "sql", "api", "ios", "nlp", "qa", "ui", "ux"}
         if skill in preserve_upper:
             return skill.upper()
-        # Handle versioned skills like node.js, node.js -> Node.js
+        # Handle versioned skills like node.js -> Node.js
         if '.' in skill and not skill.startswith('.') and not skill.endswith('.'):
             parts = skill.split('.')
             return '.'.join(part.title() for part in parts)
