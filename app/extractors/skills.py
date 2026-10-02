@@ -10,11 +10,31 @@ class SkillExtractor:
     """Extract known skills using a local skills vocabulary."""
 
     NON_SKILL_TERMS = {
-        "arabic", "bengali", "business", "chinese", "com", "communication",
-        "computer science", "english", "french", "german", "hindi", "http",
-        "https", "information technology", "italian", "japanese", "korean",
-        "leadership", "management", "net", "org", "portuguese", "spanish",
-        "teamwork", "www",
+        "arabic",
+        "bengali",
+        "business",
+        "chinese",
+        "com",
+        "communication",
+        "computer science",
+        "english",
+        "french",
+        "german",
+        "hindi",
+        "http",
+        "https",
+        "information technology",
+        "italian",
+        "japanese",
+        "korean",
+        "leadership",
+        "management",
+        "net",
+        "org",
+        "portuguese",
+        "spanish",
+        "teamwork",
+        "www",
     }
 
     def __init__(self, skills_path: Path | None = None) -> None:
@@ -60,7 +80,7 @@ class SkillExtractor:
         if skill in preserve_upper:
             return skill.upper()
         # Handle versioned skills like node.js -> Node.js
-        if '.' in skill and not skill.startswith('.') and not skill.endswith('.'):
-            parts = skill.split('.')
-            return '.'.join(part.title() for part in parts)
+        if "." in skill and not skill.startswith(".") and not skill.endswith("."):
+            parts = skill.split(".")
+            return ".".join(part.title() for part in parts)
         return skill.title()

@@ -119,7 +119,7 @@ class EducationExtractor:
         for value in values:
             normalized = value.strip()
             # Remove extra whitespace and newlines
-            normalized = ' '.join(normalized.split())
+            normalized = " ".join(normalized.split())
             key = normalized.lower()
             if normalized and key not in seen:
                 seen.add(key)
